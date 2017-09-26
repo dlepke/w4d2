@@ -21,13 +21,22 @@ client.connect((err) => {
     if (err) {
       return console.error("error running query", err);
     }
-
-    let numberOfMatches = Object.keys(result.rows).length;
-    console.log(`Found ${numberOfMatches} person(s) by the name '${argument}'`)
-    let queryResult = result.rows;
-    for (var match in queryResult) {
-      console.log(`${match}: ${queryResult[match].first_name} ${queryResult[match].last_name}, born ${queryResult[match].birthdate}`)
-    }
+    input(result);
     client.end();
   });
 });
+
+function input(resultObject) {
+  let numberOfMatches = Object.keys(resultObject.rows).length;
+  let queryResult = resultObject.rows;
+  output(queryResult, numberOfMatches);
+}
+
+
+function output(queryResultArray, numOfMatches) {
+  console.log(`Found ${numOfMatches} person(s) by the name '${argument}'`)
+  for (var match in queryResultArray) {
+    let matchedPerson = queryResultArray[match];
+    console.log(`${match}: ${matchedPerson.first_name} ${matchedPerson.last_name}, born ${matchedPerson.birthdate}`)
+  }
+}
